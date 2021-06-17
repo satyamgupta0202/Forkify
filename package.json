@@ -10,7 +10,9 @@
   "author": "satyam gupta",
   "license": "ISC",
   "dependencies": {
-    "parcel": "^2.0.0-nightly.722"
+    "core-js": "^3.14.0",
+    "parcel": "^2.0.0-nightly.722",
+    "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
     "@parcel/transformer-sass": "^2.0.0-nightly.724"
