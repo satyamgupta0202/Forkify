@@ -401,7 +401,7 @@ const showRecepie = async function() {
         //Rendenring Recipe
         _recipeViewJsDefault.default.render(_modelJs.state.recipe);
     } catch (err) {
-        alert(err);
+        _recipeViewJsDefault.default.renderErrorMessage();
     }
 };
 const init = function() {
@@ -12190,6 +12190,8 @@ parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe
 var _regeneratorRuntime = require("regenerator-runtime");
 var _confirg = require("./confirg");
 var _helper = require("./helper");
+var _recipeView = require("./view/recipeView");
+var _recipeViewDefault = parcelHelpers.interopDefault(_recipeView);
 const state = {
     recipe: {
     }
@@ -12210,11 +12212,12 @@ const loadRecipe = async function(id) {
         };
         console.log(state.recipe);
     } catch (err) {
+        _recipeViewDefault.default.renderErrorMessage(err);
         throw new Error(err);
     }
 };
 
-},{"regenerator-runtime":"aijgg","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","./confirg":"7aONJ","./helper":"54p52"}],"kcMTN":[function(require,module,exports) {
+},{"regenerator-runtime":"aijgg","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","./confirg":"7aONJ","./helper":"54p52","./view/recipeView":"3minN"}],"kcMTN":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -12293,6 +12296,8 @@ var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 class recipeView {
     #parentElement = document.querySelector('.recipe');
     #data;
+    #errorMessage = 'No recipes found for your query. Please try again!';
+    #message = '';
     render(data) {
         this.#data = data;
         const markup = this.#generateMarkup();
@@ -12304,6 +12309,18 @@ class recipeView {
     }
     renderSpinner = function() {
         const markup = `\n    <div class="spinner">\n            <svg>\n              <use href="${_iconsSvgDefault.default}#icon-loader"></use>\n            </svg>\n          </div>\n    `;
+        this.#parentElement.innerHTML = ' ';
+        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    };
+    //Render the error if any
+    renderErrorMessage = function(message = this.#errorMessage) {
+        const markup = `\n    <div class="error">\n    <div>\n      <svg>\n        <use href="${_iconsSvgDefault.default}#icon-alert-triangle"></use>\n      </svg>\n    </div>\n    <p>${message}</p>\n  </div>\n    `;
+        this.#parentElement.innerHTML = ' ';
+        this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    };
+    //Render the Success Message
+    renderMessage = function(message = this.#message) {
+        const markup = `\n        <div class="message">\n          <div>\n            <svg>\n              <use href="${_iconsSvgDefault.default}#icon-smile"></use>\n            </svg>\n          </div>\n          <p>${message}</p>\n        </div>\n    `;
         this.#parentElement.innerHTML = ' ';
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
     };

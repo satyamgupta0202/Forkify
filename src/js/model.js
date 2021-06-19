@@ -1,6 +1,7 @@
 import { async } from 'regenerator-runtime';
 import { API_URL } from './confirg';
 import { getJson } from './helper';
+import recipeView from './view/recipeView';
 export const state = {
   recipe: {},
 };
@@ -21,6 +22,7 @@ export const loadRecipe = async function (id) {
     };
     console.log(state.recipe);
   } catch (err) {
+    recipeView.renderErrorMessage(err);
     throw new Error(err);
   }
 };
