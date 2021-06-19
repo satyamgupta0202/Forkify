@@ -396,23 +396,18 @@ const showRecepie = async function() {
         if (!id) return;
         //Render Spinner
         _recipeViewJsDefault.default.renderSpinner();
-        //renderSpinner(recipeContainer);
         //Call to the model class so as to load the data
         await _modelJs.loadRecipe(id);
-        //const recipe = model.state.recipe;
         //Rendenring Recipe
         _recipeViewJsDefault.default.render(_modelJs.state.recipe);
     } catch (err) {
         alert(err);
     }
 };
-[
-    'hashchange',
-    'load'
-].forEach((event)=>window.addEventListener(event, showRecepie)
-); // window.addEventListener('hashchange', showRecepie);
- // window.addEventListener('load', showRecepie);
- // showRecepie();
+const init = function() {
+    _recipeViewJsDefault.default.addHandlerRender(showRecepie);
+};
+init();
 
 },{"regenerator-runtime/runtime":"aijgg","core-js/stable":"d8roq","./model.js":"7JzSE","./view/recipeView.js":"3minN","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN"}],"aijgg":[function(require,module,exports) {
 /**
@@ -12311,6 +12306,13 @@ class recipeView {
         const markup = `\n    <div class="spinner">\n            <svg>\n              <use href="${_iconsSvgDefault.default}#icon-loader"></use>\n            </svg>\n          </div>\n    `;
         this.#parentElement.innerHTML = ' ';
         this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    };
+    addHandlerRender = function(handler) {
+        [
+            'hashchange',
+            'load'
+        ].forEach((event)=>window.addEventListener(event, handler)
+        );
     };
      #generateMarkup() {
         return `\n    <figure class="recipe__fig">\n      <img src="${this.#data.image}" alt="${this.#data.title}" class="recipe__img" crossorigin />\n      <h1 class="recipe__title">\n        <span>${this.#data.title}</span>\n      </h1>\n  </figure>\n\n  <div class="recipe__details">\n    <div class="recipe__info">\n      <svg class="recipe__info-icon">\n        <use href="${_iconsSvgDefault.default}#icon-clock"></use>\n      </svg>\n      <span class="recipe__info-data recipe__info-data--minutes">${this.#data.cookingTime}</span>\n      <span class="recipe__info-text">minutes</span>\n    </div>\n    <div class="recipe__info">\n      <svg class="recipe__info-icon">\n        <use href="${_iconsSvgDefault.default}#icon-users"></use>\n      </svg>\n      <span class="recipe__info-data recipe__info-data--people">${this.#data.servings}</span>\n      <span class="recipe__info-text">servings</span>\n\n      <div class="recipe__info-buttons">\n        <button class="btn--tiny btn--increase-servings">\n          <svg>\n            <use href="${_iconsSvgDefault.default}#icon-minus-circle"></use>\n          </svg>\n        </button>\n        <button class="btn--tiny btn--increase-servings">\n          <svg>\n            <use href="${_iconsSvgDefault.default}#icon-plus-circle"></use>\n          </svg>\n        </button>\n      </div>\n    </div>\n\n    <div class="recipe__user-generated">\n      <svg>\n        <use href="${_iconsSvgDefault.default}#icon-user"></use>\n      </svg>\n    </div>\n    <button class="btn--round">\n      <svg class="">\n        <use href="${_iconsSvgDefault.default}#icon-bookmark-fill"></use>\n      </svg>\n    </button>\n  </div>\n\n  <div class="recipe__ingredients">\n      <h2 class="heading--2">Recipe ingredients</h2>\n      <ul class="recipe__ingredient-list">\n        ${this.#data.ingredients.map((ing)=>{

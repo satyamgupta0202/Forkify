@@ -15,10 +15,10 @@ const showRecepie = async function () {
     if (!id) return;
     //Render Spinner
     recipeView.renderSpinner();
-    //renderSpinner(recipeContainer);
+
     //Call to the model class so as to load the data
     await model.loadRecipe(id);
-    //const recipe = model.state.recipe;
+
     //Rendenring Recipe
     recipeView.render(model.state.recipe);
   } catch (err) {
@@ -26,9 +26,7 @@ const showRecepie = async function () {
   }
 };
 
-['hashchange', 'load'].forEach(event =>
-  window.addEventListener(event, showRecepie)
-);
-// window.addEventListener('hashchange', showRecepie);
-// window.addEventListener('load', showRecepie);
-// showRecepie();
+const init = function () {
+  recipeView.addHandlerRender(showRecepie);
+};
+init();
