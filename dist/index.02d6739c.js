@@ -387,18 +387,7 @@ var _stable = require("core-js/stable");
 var _modelJs = require("./model.js");
 var _recipeViewJs = require("./view/recipeView.js");
 var _recipeViewJsDefault = parcelHelpers.interopDefault(_recipeViewJs);
-///////////////////////////////////////////////////////////////
-// console.log(icons);
 const recipeContainer = document.querySelector('.recipe');
-const timeout = function(s) {
-    return new Promise(function(_, reject) {
-        setTimeout(function() {
-            reject(new Error(`Request took too long! Timeout after ${s} second`));
-        }, s * 1000);
-    });
-};
-// https://forkify-api.herokuapp.com/v2
-///////////////////////////////////////
 console.log('Wow');
 const showRecepie = async function() {
     try {
@@ -425,7 +414,7 @@ const showRecepie = async function() {
  // window.addEventListener('load', showRecepie);
  // showRecepie();
 
-},{"regenerator-runtime/runtime":"aijgg","core-js/stable":"d8roq","./model.js":"7JzSE","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","./view/recipeView.js":"3minN"}],"aijgg":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"aijgg","core-js/stable":"d8roq","./model.js":"7JzSE","./view/recipeView.js":"3minN","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN"}],"aijgg":[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -12204,16 +12193,15 @@ parcelHelpers.export(exports, "state", ()=>state
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe
 );
 var _regeneratorRuntime = require("regenerator-runtime");
+var _confirg = require("./confirg");
+var _helper = require("./helper");
 const state = {
     recipe: {
     }
 };
 const loadRecipe = async function(id) {
     try {
-        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
-        const data = await res.json();
-        if (!res.ok) throw new Error(`${data.message} ${res.status}`);
-        console.log(res, data);
+        const data = await _helper.getJson(`${_confirg.API_URL}/${id}`);
         const { recipe  } = data.data;
         state.recipe = {
             id: recipe.id,
@@ -12227,11 +12215,11 @@ const loadRecipe = async function(id) {
         };
         console.log(state.recipe);
     } catch (err) {
-        alert(err);
+        throw new Error(err);
     }
 };
 
-},{"regenerator-runtime":"aijgg","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN"}],"kcMTN":[function(require,module,exports) {
+},{"regenerator-runtime":"aijgg","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","./confirg":"7aONJ","./helper":"54p52"}],"kcMTN":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -12263,7 +12251,46 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"3minN":[function(require,module,exports) {
+},{}],"7aONJ":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL
+);
+parcelHelpers.export(exports, "TIME_OUT", ()=>TIME_OUT
+);
+const API_URL = 'https://forkify-api.herokuapp.com/api/v2/recipes';
+const TIME_OUT = 10;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN"}],"54p52":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "getJson", ()=>getJson
+);
+var _regeneratorRuntime = require("regenerator-runtime");
+var _confirg = require("./confirg");
+const timeout = function(s) {
+    return new Promise(function(_, reject) {
+        setTimeout(function() {
+            reject(new Error(`Request took too long! Timeout after ${s} second`));
+        }, s * 1000);
+    });
+};
+const getJson = async function(url) {
+    try {
+        const fetchPro = fetch(url);
+        const res = await Promise.race([
+            fetchPro,
+            timeout(_confirg.TIME_OUT)
+        ]);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message}${res.status}`);
+        return data;
+    } catch (err) {
+        throw new Error(`${err} 😍🎶😢`);
+    }
+};
+
+},{"regenerator-runtime":"aijgg","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","./confirg":"7aONJ"}],"3minN":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");
@@ -12293,7 +12320,7 @@ class recipeView {
 }
 exports.default = new recipeView();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN","url:../../img/icons.svg":"gkpIa"}],"gkpIa":[function(require,module,exports) {
+},{"url:../../img/icons.svg":"gkpIa","@parcel/transformer-js/src/esmodule-helpers.js":"kcMTN"}],"gkpIa":[function(require,module,exports) {
 module.exports = require('./bundle-url').getBundleURL() + "icons.c7300c21.svg";
 
 },{"./bundle-url":"kGdAt"}],"kGdAt":[function(require,module,exports) {
